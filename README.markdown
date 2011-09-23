@@ -1,4 +1,4 @@
-# HashHash
+# HashDigest
 
 Generates MD5 digests of Hashes (and Arrays) indifferent to key type and ordering.
 
