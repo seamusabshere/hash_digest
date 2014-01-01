@@ -1,0 +1,12 @@
+1.1.0 / 2014-01-01
+
+* Breaking changes
+
+  * UTF-8 strings only because of EscapeUtils "limitations"
+
+* Enhancements
+
+  * a changelog!
+  * replace CGI.escape with EscapeUtils.escape_url, which is 2x faster or so
+  * add HashDigest.digest2, which uses murmurhash3 instead of md5
+  * remove runtime dependency on activesupport
