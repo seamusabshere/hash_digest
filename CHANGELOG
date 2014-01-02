@@ -1,3 +1,10 @@
+1.1.1 / 2014-01-02
+
+* Bug fixes
+
+  * Fix compatibility with JRuby - thanks @towerhe https://github.com/seamusabshere/remote_table/issues/13
+  * Corrected README to latest and greatest
+
 1.1.0 / 2014-01-01
 
 * Breaking changes

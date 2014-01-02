@@ -19,11 +19,14 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_runtime_dependency 'murmurhash3'
-  s.add_runtime_dependency 'escape_utils'
 
   s.add_development_dependency 'minitest'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'activesupport'
   s.add_development_dependency 'benchmark-ips'
   s.add_development_dependency 'yard'
+
+  if ENV['TEST_ESCAPE_UTILS'] == 'true'
+    s.add_development_dependency 'escape_utils'
+  end
 end

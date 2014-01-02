@@ -1,6 +1,6 @@
 require 'digest/md5'
 require 'murmurhash3'
-require 'escape_utils'
+# see below for requiring either cgi (on JRuby) or escape_utils (if available)
 
 require "hash_digest/version"
 
@@ -38,6 +38,22 @@ module HashDigest
   def self.hexdigest(obj)
     ::Digest::MD5.hexdigest as_digest1(obj)
   end
+
+  # CGI escaping engine
+
+  if RUBY_PLATFORM == 'java'
+    require 'cgi'
+    def self.escape_url(str);     ::CGI.escape(str) end
+  else
+    begin
+      # MUCH faster than stdlib's cgi
+      require 'escape_utils'
+      def self.escape_url(str);   ::EscapeUtils.escape_url(str) end
+    rescue LoadError
+      require 'cgi'
+      def self.escape_url(str);   ::CGI.escape(str) end
+    end
+  end
 end
 
 # EVERYTHING BELOW IS COPIED FROM ACTIVESUPPORT 4.0.2
@@ -70,7 +86,6 @@ end
 
 class Object
   def to_hash_digest_query(key)
-    # "#{::CGI.escape(key.to_hash_digest_param)}=#{::CGI.escape(to_hash_digest_param)}"
-    "#{::EscapeUtils.escape_url(key.to_hash_digest_param)}=#{::EscapeUtils.escape_url(to_hash_digest_param)}"
+    "#{::HashDigest.escape_url(key.to_hash_digest_param)}=#{::HashDigest.escape_url(to_hash_digest_param)}"
   end
 end
