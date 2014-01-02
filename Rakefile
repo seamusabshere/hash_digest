@@ -8,4 +8,9 @@ Rake::TestTask.new(:test) do |test|
   test.verbose = true
 end
 
+require 'yard'
+YARD::Rake::YardocTask.new do |y|
+  y.options << '--no-private'
+end
+
 task :default => :test
