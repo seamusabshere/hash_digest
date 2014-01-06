@@ -62,6 +62,10 @@ class Object
   def to_hash_digest_param
     to_s
   end
+
+  def to_hash_digest_query(key)
+    "#{::HashDigest.escape_url(key.to_hash_digest_param)}=#{::HashDigest.escape_url(to_hash_digest_param)}"
+  end
 end
 
 class Array
@@ -69,7 +73,7 @@ class Array
     map { |e| e.to_hash_digest_param }.join '/'
   end
 
-  def to_hash_digest_query(key)
+  def to_hash_digest_query(key = nil)
     prefix = "#{key}[]"
     map { |value| value.to_hash_digest_query(prefix) }.join '&'
   end
@@ -82,10 +86,4 @@ class Hash
     end.sort.join '&'
   end
   alias_method :to_hash_digest_query, :to_hash_digest_param
-end
-
-class Object
-  def to_hash_digest_query(key)
-    "#{::HashDigest.escape_url(key.to_hash_digest_param)}=#{::HashDigest.escape_url(to_hash_digest_param)}"
-  end
 end

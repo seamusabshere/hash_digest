@@ -67,6 +67,7 @@ describe HashDigest do
       [{:a => 1, 'b' => 2},             {'a' => 1, :b => 2}],
       [{:a => 1, 'b' => [1, 2]},        {'a' => 1, :b => ['1', 2]}],
       [{:a => 1, 'b' => { foo: :bar }}, {'a' => 1, :b => { 'foo' => 'bar' }}],
+      [[:a, 'b'], ['a', :b]],
     ].each do |a, b|
       it "trivial difference between #{a} and #{b}" do
         assert_same_as_old a
