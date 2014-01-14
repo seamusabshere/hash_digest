@@ -1,3 +1,10 @@
+1.1.3 / 2014-01-14
+
+* Enhancements
+
+  * digest2 is deprecated - too many collisions because we were using MurmurHash3 V32 under the hood
+  * digest3 is the replacement - uses SHA1 hexdigest
+
 1.1.2 / 2014-01-06
 
 * Bug fixes

@@ -6,51 +6,42 @@ Extracted from [`RemoteTable`](https://github.com/seamusabshere/remote_table).
 
 ## Note plz
 
-1. You should use `HashDigest.digest2` for new applications. `hexdigest` is legacy.
-2. `digest2`, unlike its predecessor, is CASE SENSITIVE.
+1. You should use `HashDigest.digest3` for new applications. `hexdigest` and `digest2` are legacy.
+2. `digest2` is CASE SENSITIVE and has relatively high level of collisions - not recommended.
 
 ## Example
 
 ### Indifferent to key type
 
-    >> HashDigest.digest2(:a => 1)
-    => "1s05qdo"
-    >> HashDigest.digest2('a' => 1)
-    => "1s05qdo"
+    >> HashDigest.digest3(:a => 1)
+    => "86eda770a6060824b090dd4df091e3bd4121279c"
+    >> HashDigest.digest3('a' => 1)
+    => "86eda770a6060824b090dd4df091e3bd4121279c"
 
 ### Indifferent to key order
 
-    >> HashDigest.digest2(:a => 1, 'b' => 2)
-    => "fkqncr"
-    >> HashDigest.digest2(:b => 2, 'a' => 1)
-    => "fkqncr"
+    >> HashDigest.digest3(:a => 1, 'b' => 2)
+    => "d53cf64e768f4ef09c806bbe12258c78211b2690"
+    >> HashDigest.digest3(:b => 2, 'a' => 1)
+    => "d53cf64e768f4ef09c806bbe12258c78211b2690"
 
 ## Speed
 
 If you're **not** on JRuby, having [`EscapeUtils`](https://github.com/brianmario/escape_utils) in your `Gemfile` will make things much faster.
 
-### With EscapeUtils (MRI, doesn't work on JRuby)
-
-      HashDigest.digest2      2492 i/100ms
-    HashDigest.hexdigest      2276 i/100ms
-    
-### With stdlib's CGI (JRuby)
-
-      HashDigest.digest2       645 i/100ms
-    HashDigest.hexdigest       213 i/100ms
-
-### With stdlib's CGI (MRI)
-
-      HashDigest.digest2       531 i/100ms
-    HashDigest.hexdigest       513 i/100ms
-
 ## Algorithm
 
-### digest2 (current)
+### digest3
 
 1. Represent the hash as a URL querystring
 2. Sort by key
-3. [MurmurHash3](http://en.wikipedia.org/wiki/MurmurHash)
+3. SHA1 hexdigest
+
+### digest2 (deprecated and not recommended)
+
+1. Represent the hash as a URL querystring
+2. Sort by key
+3. [MurmurHash3](http://en.wikipedia.org/wiki/MurmurHash) V32 (this turned out to have too many collisions)
 4. Convert to base 36 to save space
 
 Note: non-cryptographic and variable length. CASE SENSITIVE.

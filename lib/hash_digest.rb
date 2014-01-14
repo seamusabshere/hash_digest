@@ -1,4 +1,5 @@
 require 'digest/md5'
+require 'digest/sha1'
 require 'murmurhash3'
 # see below for requiring either cgi (on JRuby) or escape_utils (if available)
 
@@ -6,17 +7,26 @@ require "hash_digest/version"
 
 module HashDigest
   # CURRENT
+  def self.as_digest3(obj)
+    obj.to_hash_digest_query
+  end
 
+  # CURRENT
+  def self.digest3(obj)
+    ::Digest::SHA1.hexdigest as_digest2(obj)
+  end
+
+  # LEGACY
   def self.as_digest2(obj)
     obj.to_hash_digest_query
   end
 
+  # LEGACY
   def self.digest2(obj)
     ::MurmurHash3::V32.str_hash(as_digest2(obj)).to_s 36
   end
 
   # LEGACY
-
   def self.as_digest1(obj)
     ordered_list = case obj
     when ::Hash
@@ -35,6 +45,7 @@ module HashDigest
     ordered_list.join '&'
   end
 
+  # LEGACY
   def self.hexdigest(obj)
     ::Digest::MD5.hexdigest as_digest1(obj)
   end

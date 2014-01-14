@@ -5,8 +5,8 @@ require 'stringio'
 describe HashDigest do
   include TestHelper
 
-  describe '.digest2' do
-    it "is much faster than .hexdigest" do
+  describe 'speed' do
+    it "improves as we get older" do
       hsh = { 'a' => 1, :b => { foo: :bar, zoo: 'animal' }, ";b\n`&" => { foo: :bar, zoo: "==&ani!!.;&mal\n" } }
       begin
         old_stdout = $stdout
@@ -14,6 +14,7 @@ describe HashDigest do
         Benchmark.ips do |x|
           x.report("HashDigest.hexdigest")  { HashDigest.hexdigest(hsh) }
           x.report("HashDigest.digest2")    { HashDigest.digest2(hsh)   }
+          x.report("HashDigest.digest3")    { HashDigest.digest3(hsh)   }
         end
         $stdout.rewind
         result = $stdout.read
@@ -56,11 +57,11 @@ describe HashDigest do
 
   describe 'indifference to' do
     it 'key type' do
-      HashDigest.as_digest2(:a => 1, 'b' => 2).must_equal(HashDigest.as_digest2('a' => 1, :b => 2))
+      HashDigest.as_digest3(:a => 1, 'b' => 2).must_equal(HashDigest.as_digest3('a' => 1, :b => 2))
     end
     
     it 'key order' do
-      HashDigest.as_digest2(:a => 1, 'b' => 2).must_equal(HashDigest.as_digest2(:b => 2, 'a' => 1))
+      HashDigest.as_digest3(:a => 1, 'b' => 2).must_equal(HashDigest.as_digest3(:b => 2, 'a' => 1))
     end
 
     [
@@ -72,7 +73,7 @@ describe HashDigest do
       it "trivial difference between #{a} and #{b}" do
         assert_same_as_old a
         assert_same_as_old b
-        HashDigest.as_digest2(b).must_equal(HashDigest.as_digest2(b))
+        HashDigest.as_digest3(b).must_equal(HashDigest.as_digest3(b))
       end
     end
   end
