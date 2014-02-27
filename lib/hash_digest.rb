@@ -13,7 +13,7 @@ module HashDigest
 
   # CURRENT
   def self.digest3(obj)
-    ::Digest::SHA1.hexdigest as_digest2(obj)
+    ::Digest::SHA1.hexdigest as_digest3(obj)
   end
 
   # LEGACY
