@@ -81,6 +81,8 @@ describe HashDigest do
   it "cares about order in arrays" do
     HashDigest.as_digest3([:a, :b]).wont_equal HashDigest.as_digest3([:b, :a])
     HashDigest.as_digest3([:a, nil]).wont_equal HashDigest.as_digest3([nil, :a])
+    HashDigest.as_digest3([:a, nil]).wont_equal HashDigest.as_digest3([:a])
+    HashDigest.as_digest3([nil, :a]).wont_equal HashDigest.as_digest3([:a])
   end
   
   it "raises an exception if you try to digest anything other than a Hash or Array" do
