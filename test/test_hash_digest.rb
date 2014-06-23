@@ -77,6 +77,11 @@ describe HashDigest do
       end
     end
   end
+
+  it "cares about order in arrays" do
+    HashDigest.as_digest3([:a, :b]).wont_equal HashDigest.as_digest3([:b, :a])
+    HashDigest.as_digest3([:a, nil]).wont_equal HashDigest.as_digest3([nil, :a])
+  end
   
   it "raises an exception if you try to digest anything other than a Hash or Array" do
     lambda { HashDigest.hexdigest('foobar') }.must_raise(::ArgumentError)
